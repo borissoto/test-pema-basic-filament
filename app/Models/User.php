@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\UserType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type'
     ];
 
     /**
@@ -45,4 +48,17 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    protected $casts = [
+        'type' => UserType::class,
+    ];
+
+    public function organizations(){
+        return $this->belongsToMany(Organization::class,'organization_user', 'user_id', 'organization_id');
+    }
+
+    public function companies(){
+        return $this->hasOne(Company::class,'user_id');
+    }
+
 }
