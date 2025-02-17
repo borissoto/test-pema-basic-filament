@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\UserType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -29,7 +30,23 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'type' => UserType::CLIENT,
         ];
+    }
+
+    public function admin(): self
+    {
+        return $this->state(fn (array $attributes) => ['type' => UserType::ADMIN]);
+    }
+
+    public function staff(): self
+    {
+        return $this->state(fn (array $attributes) => ['type' => UserType::STAFF]);
+    }
+
+    public function client(): self
+    {
+        return $this->state(fn (array $attributes) => ['type' => UserType::CLIENT]);
     }
 
     /**
